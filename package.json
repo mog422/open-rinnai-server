@@ -1,0 +1,22 @@
+{
+  "name": "open-rinnai-server",
+  "version": "0.0.1",
+  "description": "Open Rinnai Server",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "mog422",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-router": "^7.4.0",
+    "raw-body": "^2.4.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.0",
+    "@types/koa-router": "^7.4.0",
+    "typescript": "^3.7.5"
+  }
+}
