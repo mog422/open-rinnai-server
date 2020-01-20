@@ -188,8 +188,79 @@ restRouter.put("/targettemp", async (ctx) => {
         throw new Error("invalid temp");
     }
     await sendCommand((state) => {
-        state.currentRoomTemp = temp;
+        state.targetRoomTemp = temp;
         state.targetHeatWaterTemp = temp;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/preheat/on", async (ctx) => {
+    await sendCommand((state) => {
+        state.isPreHeat = true;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/preheat/off", async (ctx) => {
+    await sendCommand((state) => {
+        state.isPreHeat = false;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/quickheat/on", async (ctx) => {
+    await sendCommand((state) => {
+        state.isQuickHeat = true;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/quickheat/off", async (ctx) => {
+    await sendCommand((state) => {
+        state.isQuickHeat = false;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/heat/on", async (ctx) => {
+    await sendCommand((state) => {
+        state.isHeatOn = true;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/heat/off", async (ctx) => {
+    await sendCommand((state) => {
+        state.isHeatOn = false;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/hotwater/on", async (ctx) => {
+    await sendCommand((state) => {
+        state.isHotWaterOn = true;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/hotwater/off", async (ctx) => {
+    await sendCommand((state) => {
+        state.isHotWaterOn = false;
+    });
+    ctx.body = '';
+});
+
+
+restRouter.put("/goout/on", async (ctx) => {
+    await sendCommand((state) => {
+        state.isGoOut = 0x80;
+    });
+    ctx.body = '';
+});
+
+restRouter.put("/goout/off", async (ctx) => {
+    await sendCommand((state) => {
+        state.isGoOut = 0;
     });
     ctx.body = '';
 });
