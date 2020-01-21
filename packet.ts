@@ -102,12 +102,12 @@ export class StatusData {
     public heatInfoUnk1: boolean;
     public heatInfoUnk2: boolean;
 
-    public targetRoomTemp: number;
-    public targetHeatWaterTemp: number;
-    public targetHotWaterTemp: number;
+    public desiredRoomTemp: number;
+    public desiredHeatWaterTemp: number;
+    public desiredHotWaterTemp: number;
 
     public currentRoomTemp: number;
-    public currentHotWaterTemp: number;
+    public currentWaterTemp: number;
 
     public combustionState: number;
     public driveStatUnk1: boolean;
@@ -135,12 +135,12 @@ export class StatusData {
         this.heatInfoUnk1 = false;
         this.heatInfoUnk2 = false;
 
-        this.targetRoomTemp = 0;
-        this.targetHeatWaterTemp = 0;
-        this.targetHotWaterTemp = 0;
+        this.desiredRoomTemp = 0;
+        this.desiredHeatWaterTemp = 0;
+        this.desiredHotWaterTemp = 0;
 
         this.currentRoomTemp = 0;
-        this.currentHotWaterTemp = 0;
+        this.currentWaterTemp = 0;
 
         this.combustionState = 1;
         this.driveStatUnk1 = false;
@@ -171,16 +171,16 @@ export class StatusData {
             this.heatInfoUnk2 = !!(val & 0x80);
         }
 
-        this.targetRoomTemp = reader.readHexValue();
-        this.targetHeatWaterTemp = reader.readHexValue();
+        this.desiredRoomTemp = reader.readHexValue();
+        this.desiredHeatWaterTemp = reader.readHexValue();
         {
             let val = reader.readHexValue();
-            this.targetHotWaterTemp = val & 0x7f;
-            if (val & 0x80) this.targetHotWaterTemp = 0.5;
+            this.desiredHotWaterTemp = val & 0x7f;
+            if (val & 0x80) this.desiredHotWaterTemp = 0.5;
         }
         
         this.currentRoomTemp = reader.readHexValue();
-        this.currentHotWaterTemp = reader.readHexValue();
+        this.currentWaterTemp = reader.readHexValue();
 
         {
             let val = reader.readHexValue();
@@ -223,18 +223,18 @@ export class StatusData {
             builder.appendHexValue(val);
         }
 
-        builder.appendHexValue(this.targetRoomTemp);
-        builder.appendHexValue(this.targetHeatWaterTemp);
+        builder.appendHexValue(this.desiredRoomTemp);
+        builder.appendHexValue(this.desiredHeatWaterTemp);
         {
-            let val = this.targetHotWaterTemp & 0x7f;
-            if (val !== this.targetHotWaterTemp) {
+            let val = this.desiredHotWaterTemp & 0x7f;
+            if (val !== this.desiredHotWaterTemp) {
                 val |= 0x80;
             }
             builder.appendHexValue(val);
         }
 
         builder.appendHexValue(this.currentRoomTemp);
-        builder.appendHexValue(this.currentHotWaterTemp);
+        builder.appendHexValue(this.currentWaterTemp);
 
         {
             let val = this.combustionState & 0x0f;

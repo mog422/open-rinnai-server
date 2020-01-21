@@ -182,14 +182,14 @@ restRouter.put("/power/off", async (ctx) => {
     ctx.body = '';
 });
 
-restRouter.put("/targettemp", async (ctx) => {
+restRouter.put("/desiredtemp", async (ctx) => {
     let temp = ctx.query.temp | 0;
     if (temp < 15 || 30 < temp) {
         throw new Error("invalid temp");
     }
     await sendCommand((state) => {
-        state.targetRoomTemp = temp;
-        state.targetHeatWaterTemp = temp;
+        state.desiredRoomTemp = temp;
+        state.desiredHeatWaterTemp = temp;
     });
     ctx.body = '';
 });
