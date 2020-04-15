@@ -7,7 +7,9 @@ import * as mqtt from 'async-mqtt';
 import { Packet, StatusData } from './packet';
 
 const BOILER_PORT = process.env.BOILER_PORT ? ( process.env.BOILER_PORT as any | 0) : 9105;
+const BOILER_HOST = process.env.BOILER_HOST ? process.env.BOILER_HOST : '127.0.0.1';
 const RESTAPI_PORT = process.env.RESTAPI_PORT ? ( process.env.RESTAPI_PORT as any | 0) : 8081;
+const RESTAPI_HOST = process.env.RESTAPI_HOST ? process.env.RESTAPI_HOST : '127.0.0.1';
 const TIMEOUT = 10 * 1000;
 const HASS_NODEID = 'open-rinnai-server';
 const MQTT_TOPIC_PREFIX = 'open-rinnai-server';
@@ -150,7 +152,7 @@ function onChangeState(oldState: StatusData, newState: StatusData) {
     }
 }
 
-boilerApp.use(boilerRouter.routes()).use(boilerRouter.allowedMethods()).listen(BOILER_PORT);
+boilerApp.use(boilerRouter.routes()).use(boilerRouter.allowedMethods()).listen(BOILER_PORT, BOILER_HOST);
 
 
 let restApp = new Koa();
@@ -313,7 +315,7 @@ restRouter.put("/goout/off", async (ctx) => {
     ctx.body = '';
 });
 
-restApp.use(restRouter.routes()).use(restRouter.allowedMethods()).listen(RESTAPI_PORT, '127.0.0.1');
+restApp.use(restRouter.routes()).use(restRouter.allowedMethods()).listen(RESTAPI_PORT, RESTAPI_HOST);
 
 
 
