@@ -491,18 +491,22 @@ if (mqttClient) {
                                 state.isPowerOn = true;
                                 state.isHotWaterOn = true;
                                 state.isHeatOn = true;
+                                break;
                             case "heat":
                                 state.isPowerOn = true;
                                 state.isHotWaterOn = false;
                                 state.isHeatOn = true;
+                                break;
                             case "dry":
                                 state.isPowerOn = true;
                                 state.isHotWaterOn = true;
                                 state.isHeatOn = false;
+                                break;
                             case "cool":
                                 state.isPowerOn = true;
                                 state.isHotWaterOn = false;
                                 state.isHeatOn = false;
+                                break;
                         }
                     });
                     break;
