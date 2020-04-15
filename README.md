@@ -1,6 +1,6 @@
 # open-rinnai-server
 
-Rannai is a well-known boiler company in South Korea and one of the features that Rinnai offers is remote control from your personal devices, in short, the IoT service. However there is no guarantee that Rannai will continue to support and update their IoT service of the boilers they sold, or security incident will happen. To avoid these concerns, this repo allows you to run it on your own local network and emulates their main server for not using their app, but through RESTful APIs this repo provides.
+Rannai is a well-known boiler company in South Korea and one of the features that Rinnai offers is remote control from your personal devices, in short, the IoT service. However there is no guarantee that Rannai will continue to support and update their IoT service of the boilers they sold, or security incident will happen. To avoid these concerns, this repo allows you to run it on your own local network and emulates their main server for not using their app, but through RESTful APIs or home assistant this repo provides.
 
 ## How to use it
 * `npm run build`
