@@ -340,6 +340,11 @@ async function initialPublish() {
         min_temp: 15,
         precision: 1,
         modes: ['off', 'cool', 'auto', 'heat', 'dry'],
+        unique_id: HASS_NODEID,
+        device: {
+            "identifiers": [HASS_NODEID],
+            "name": "OpenRinnai"
+        },
         name: 'OpenRinnai'
     }));
 
@@ -438,6 +443,7 @@ async function publishFullState() {
 if (mqttClient) {
     mqttClient.on('connect', async () => {
         try {
+            await mqttClient.subscribe(`hass/status`);
             await mqttClient.subscribe(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/set_away_mode`);
             await mqttClient.subscribe(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/set_target_temperature`);
             await mqttClient.subscribe(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/set_target_hot_water_temperature`);
@@ -452,6 +458,9 @@ if (mqttClient) {
         try {
             let message = raw.toString();
             switch (topic) {
+                case 'hass/status':
+                    if (message === 'online') await initialPublish();
+                    break;
                 case `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/set_away_mode`:
                     await sendCommand((state) => {
                         if (message === "ON") {
