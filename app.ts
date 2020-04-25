@@ -459,7 +459,12 @@ if (mqttClient) {
             let message = raw.toString();
             switch (topic) {
                 case 'hass/status':
-                    if (message === 'online') await initialPublish();
+                    if (message === 'online') {
+                        // https://github.com/Koenkk/zigbee2mqtt/blob/864e8b26d5cb6ef951299aea21423ffb25304b1d/lib/extension/homeassistant.js#L1862
+                        setTimeout(() => {
+                            initialPublish().catch((e) => logger.error(e));
+                        }, 30 * 1000);
+                    }
                     break;
                 case `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/set_away_mode`:
                     await sendCommand((state) => {
