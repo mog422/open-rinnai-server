@@ -147,6 +147,12 @@ function onChangeState(oldState: StatusData, newState: StatusData) {
     if (!oldState || changedKeys.has('isPowerOn') || changedKeys.has('isHeatOn') || changedKeys.has('isHotWaterOn')) {
         publishMode();
     }
+    if (!oldState || changedKeys.has('isHotWaterUsing')) {
+        publishIsHotWaterUsing();
+    }
+    if (!oldState || changedKeys.has('currentWaterTemp')) {
+        publishCurrentWaterTemperature();
+    }
     if (!oldState || changedKeys.size) {
         publishFullState();
     }
@@ -348,6 +354,31 @@ async function initialPublish() {
         name: 'OpenRinnai'
     }));
 
+    await mqttClient.publish(`homeassistant/binary_sensor/${HASS_NODEID}/water_using/config`, JSON.stringify({
+        availability_topic: `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/availability`,
+        device: {
+            "identifiers": [HASS_NODEID],
+            "name": "OpenRinnai"
+        },
+        name: 'OpenRinnai Water Using',
+        unique_id: `${HASS_NODEID}_water_using`,
+        device_class: "moisture",
+        state_topic: `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/is_hot_water_using`
+    }));
+
+    await mqttClient.publish(`homeassistant/sensor/${HASS_NODEID}/current_water_temperature/config`, JSON.stringify({
+        availability_topic: `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/availability`,
+        device: {
+            "identifiers": [HASS_NODEID],
+            "name": "OpenRinnai"
+        },
+        name: 'OpenRinnai Current Temperature',
+        unique_id: `${HASS_NODEID}_current_water_temperature`,
+        unit_of_measurement:"°C",
+        device_class: "temperature",
+        state_topic: `${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/current_water_temperature`
+    }));
+
     mqttReportedAvailability = !isBoilerConnected();
     await publishAvailability();
 
@@ -356,7 +387,9 @@ async function initialPublish() {
     await publishTargetTemperature();
     await publishTargetHotWaterTemperature();
     await publishCurrentTemperature();
+    await publishCurrentWaterTemperature();
     await publishMode();
+    await publishIsHotWaterUsing();
     await publishFullState();
 }
 async function publishAvailability() {
@@ -410,6 +443,16 @@ async function publishTargetTemperature() {
 async function publishTargetHotWaterTemperature() {
     if (!mqttClient) return;
     await mqttClient.publish(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/target_hot_water_temperature`, (boilerState != null) ? boilerState.desiredHotWaterTemp.toString() : "0");
+}
+
+async function publishIsHotWaterUsing() {
+    if (!mqttClient) return;
+    await mqttClient.publish(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/is_hot_water_using`, (boilerState != null && boilerState.isHotWaterUsing) ? "ON": "OFF");
+}
+
+async function publishCurrentWaterTemperature() {
+    if (!mqttClient) return;
+    await mqttClient.publish(`${MQTT_TOPIC_PREFIX}/${HASS_NODEID}/current_water_temperature`, (boilerState != null) ? boilerState.currentWaterTemp.toString() : "0");
 }
 
 async function publishCurrentTemperature() {
